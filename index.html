@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html >
+<head>
+  
+  
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="cart-container">
+    <h1>Shopping Cart</h1>
+    <div class="cart">
+      <ul id="item-list">
+        
+      </ul>
+      <p>Total Price: <span id="total-price">0</span></p>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+<script>
+  const itemList = document.getElementById("item-list");
+const totalPriceSpan = document.getElementById("total-price");
+
+
+const items = [
+  { name: "Item 1", price: 10, quantity: 2, liked: false },
+  { name: "Item 2", price: 15, quantity: 1, liked: true },
+ 
+];
+
+
+function updateTotalPrice() {
+  const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  totalPriceSpan.textContent = total;
+}
+
+
+function renderCartItems() {
+  itemList.innerHTML = "";
+
+  items.forEach((item, index) => {
+    const listItem = document.createElement("li");
+    listItem.innerHTML = `
+      <span>${item.name}</span>
+      <button onclick="decreaseQuantity(${index})">-</button>
+      <span>${item.quantity}</span>
+      <button onclick="increaseQuantity(${index})">+</button>
+      <button onclick="removeItem(${index})">Remove</button>
+      <button onclick="toggleLike(${index})" class="heart ${item.liked ? 'liked' : ''}">&hearts;</button>
+    `;
+    itemList.appendChild(listItem);
+  });
+
+  updateTotalPrice();
+}
+
+
+function increaseQuantity(index) {
+  items[index].quantity++;
+  renderCartItems();
+}
+
+
+function decreaseQuantity(index) {
+  if (items[index].quantity > 1) {
+    items[index].quantity--;
+    renderCartItems();
+  }
+}
+
+
+function removeItem(index) {
+  items.splice(index, 1);
+  renderCartItems();
+}
+
+function toggleLike(index) {
+  items[index].liked = !items[index].liked;
+  renderCartItems();
+}
+
+
+renderCartItems();
+
+</script>
+</html>
